@@ -25,14 +25,14 @@
         }
         h1 {
             font-size: 4rem;
-            margin-bottom: 2rem; /* Increased margin to add space below the heading */
+            margin-bottom: 3rem; /* Increased margin to add more space below the heading */
         }
         .btn-container {
             display: flex;
             justify-content: center;
             gap: 2rem; /* Increase the gap between the buttons */
             flex-wrap: wrap;
-            margin-top: 2rem; /* Additional space between heading and buttons */
+            margin-top: 3rem; /* Additional space between heading and buttons */
         }
         .tutorial-btn {
             width: 300px; /* Increase the width of the buttons */
@@ -66,11 +66,53 @@
         .btn-3 {
             background-image: url('assets/first class.png');
         }
+        .search-container {
+            margin-top: 2rem;
+        }
+        .search-bar {
+            width: 80%; /* Increase the width to make it almost as wide as the heading */
+            padding: 0.75rem;
+            font-size: 1.5rem;
+            border: 2px solid white;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            margin-bottom: 3rem; /* Added margin below search bar for space */
+        }
+        .search-bar::placeholder {
+            color: white;
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchBar = document.getElementById('search-bar');
+            searchBar.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    goToTutorial();
+                }
+            });
+        });
+
+        function goToTutorial() {
+            const link = document.getElementById('search-bar').value;
+            if (link.includes('https://www.youtube.com/shorts/onjTs0sxvrQ')) {
+                window.location.href = 'finesse tutorial/t1.html';
+            } else if (link.includes('https://www.youtube.com/watch?v=XLiXFesKp9E')) {
+                window.location.href = 'collide tutorial/t1.html';
+            } else if (link.includes('https://www.youtube.com/watch?v=DdC7M9HQmN0')) {
+                window.location.href = 'first class tutorial/t1.html';
+            } else {
+                alert('Tutorial not found for the entered link.');
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="bg">
         <h1>Anybody Can Dance</h1>
+        <div class="search-container">
+            <input type="text" id="search-bar" class="search-bar" placeholder="Enter video link here...">
+        </div>
         <div class="btn-container">
             <a href="finesse tutorial/t1.html" class="tutorial-btn btn-1">Finesse</a>
             <a href="collide tutorial/t1.html" class="tutorial-btn btn-2">Collide</a>
