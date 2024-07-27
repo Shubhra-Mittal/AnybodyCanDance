@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('../assets/abcd_bg.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+        }
+
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .home-button:hover {
+            background-color: #f0f0f0;
+        }
+        
+        .content-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            gap: 20px;
+        }
+        .video-frame, .webcam-frame {
+            width: 80%;
+            max-width: 640px;
+            height: auto;
+            border: 2px solid white;
+            aspect-ratio: 16/9;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        .controls button {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            color: black;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background-color: #f0f0f0;
+        }
+        .countdown {
+            position: absolute;
+            font-size: 6rem;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">ABCD</div>
+    <a href="../index.html" class="home-button">Home</a>
+    <div class="content-container">
+        <iframe class="video-frame" src="https://drive.google.com/file/d/1YMx2HwbMey2hOx92DFzAXufac2Yl9IjB/preview" allow="autoplay"></iframe>
+        <video id="webcam" class="webcam-frame" autoplay></video>
+    </div>
+    <div class="controls">
+        <button onclick="restartVideo()">Practice</button>
+        <button onclick="goToWebcam()">Review</button>
+    </div>
+    <div class="countdown" id="countdown">5</div>
+    <script>
+        let countdownInterval;
+
+        function playVideoWithSound(video) {
+            video.volume = 1.0;
+            video.muted = false;
+            const playPromise = video.play();
+
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('Autoplay prevented: manual play required.');
+                }).then(() => {
+                    console.log('Video playing with sound.');
+                });
+            }
+        }
+
+        function startCountdown(callback) {
+            const countdown = document.getElementById('countdown');
+            const countdownSequence = ['5', '6', '7', '8'];
+            let index = 0;
+
+            countdown.style.display = 'flex';
+            countdown.textContent = countdownSequence[index];
+
+            countdownInterval = setInterval(() => {
+                index++;
+                if (index < countdownSequence.length) {
+                    countdown.textContent = countdownSequence[index];
+                } else {
+                    clearInterval(countdownInterval);
+                    countdown.style.display = 'none';
+                    callback();
+                }
+            }, 500); // Change every 0.5 seconds
+        }
+
+        window.onload = function() {
+            const video = document.getElementById('checkVideo');
+            startCountdown(() => playVideoWithSound(video));
+
+            // Access the webcam
+            const webcam = document.getElementById('webcam');
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                    webcam.srcObject = stream;
+                    webcam.play();
+                });
+            }
+        };
+
+        function restartVideo() {
+            const video = document.getElementById('checkVideo');
+            video.currentTime = 0;
+            video.pause();
+            clearInterval(countdownInterval);
+            startCountdown(() => playVideoWithSound(video));
+        }
+
+        function goToWebcam() {
+            window.location.href = 'review.html';
+        }
+    </script>
+</body>
+</html>
